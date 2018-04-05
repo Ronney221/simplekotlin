@@ -37,8 +37,11 @@ fun mathOp(first: Int, second: Int, fnc: (Int, Int) -> Int) : Int {
 }
 // write a class "Person" with first name, last name and age
 class Person (var firstName: String,var lastName: String,var age: Int) {
-    
-    val debugString : String = "[Person firstName:$firstName lastName:$lastName age:$age]"
+
+    //val debugString : String = "[Person firstName:$firstName lastName:$lastName age:$age]"
+    val debugString: String by lazy {
+        "[Person firstName:$firstName lastName:$lastName age:$age]"
+    }
 }
 
 // write a class "Money"
