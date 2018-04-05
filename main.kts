@@ -3,14 +3,85 @@
 println("UW Homework: Simple Kotlin")
 
 // write a "whenFn" that takes an arg of type "Any" and returns a String
-
+fun whenFn(arg : Any) : String {
+    if (arg == "Hello") {
+        return "world"
+    } else if (arg is String) {
+        return "Say what?"
+    } else if (arg == 0) {
+        return "zero"
+    } else if (arg == 1) {
+        return "one"
+    }  else if (arg is Int) {
+        if (arg.toInt() >= 2 && arg.toInt() <= 10) {
+            return "low number"
+        } else {
+            return "a number"
+        }
+    } else {
+        return "I don't understand"
+    }
+}
 // write an "add" function that takes two Ints, returns an Int, and adds the values
-// write a "sub" function that takes two Ints, returns an Int, and subtracts the values
-// write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+fun add(first: Int, second: Int) : Int {
+    return first + second
+}
 
+// write a "sub" function that takes two Ints, returns an Int, and subtracts the values
+fun sub(first : Int, second: Int) : Int {
+    return (first - second)
+}
+// write a "mathOp" function that takes two Ints and a function (that takes two Ints and returns an Int), returns an Int, and applies the passed-in-function to the arguments
+fun mathOp(first: Int, second: Int, fnc: (Int, Int) -> Int) : Int {
+    return fnc(first, second)
+}
 // write a class "Person" with first name, last name and age
+class Person (var firstName: String,var lastName: String,var age: Int) {
+    
+    val debugString : String = "[Person firstName:$firstName lastName:$lastName age:$age]"
+}
 
 // write a class "Money"
+/*Create a class, "Money", that has two properties, "amount" and "currency".
+ "Currency" can be one of "USD", "EUR", "CAN" and "GBP". "Amount" is a standard Int.
+  Define the properties such that "amount" can never be less than zero, and that "currency" can only be one of those four symbols.
+  Define a public method, convert, that takes a String argument for the currency type to convert to,
+   and return a new Money instance with the amount converted.
+    Conversion rates should be as follows: 10 USD converts to 5 GBP; 10 USD converts to 15 EUR; 12 USD converts to 15 CAN.
+    (Make sure you can convert in both directions!)
+    Define the "+" operator on Money to return a new instance of Money that adds the amount,
+     converting the currency to the first (left-hand) Money's currency. So adding (10 USD) + (5 GBP)
+     should return a result in USD. Similarly, adding (5 GBP) + (10 USD) should return the result in GBP. */
+
+public class Money(var amount:Int, var currency: String){
+
+    operator fun plus(other: Money): Money{
+        return Money(this.amount + other.convert(this.currency).amount, this.currency)
+    }
+
+    operator fun Money.unaryMinus() = Money(-amount, currency)
+
+    fun convert(type: String) : Money {
+        if (type == "GBP" && this.currency == "USD") { //usd to gbp
+            return (Money(this.amount / 2, "GBP"))
+        } else if (type == "EUR" && this.currency == "USD"){ // usd to eur
+             return (Money((this.amount.toDouble() * 1.5).toInt(), "EUR"))
+        } else if (type == "CAN" && this.currency == "USD") { //USD TO CAN
+            return (Money((this.amount / 12 )* 15, "CAN"))
+        } else if (type == "USD" && this.currency == "GBP") { //GBP TO USD
+            return (Money(this.amount * 2, "USD"))
+        } else if (type == "USD" && this.currency == "EUR") { //EUR TO USD
+            return (Money((this.amount * 2) / 3, "USD"))
+        } else if (type == "USD" && this.currency == "CAD") { //CAD TO USD
+            return (Money((this.amount * 15 )/ 12, "USD"))
+        } else if (type == "USD" && this.currency == "USD") {// USD TO USD
+            return (Money(this.amount, "USD"))
+        } else { // gbp to eur
+            return (Money(this.amount*3, "EUR"))
+        }
+    }
+}
+
 
 // ============ DO NOT EDIT BELOW THIS LINE =============
 
@@ -83,6 +154,7 @@ val convert_tests = listOf(
     Pair(fiveGBP, tenUSD),
     Pair(fiveGBP, fifteenEUR)
 )
+
 for ( (from,to) in convert_tests) {
     print(if (from.convert(to.currency).amount == to.amount) "." else "!")
 }
